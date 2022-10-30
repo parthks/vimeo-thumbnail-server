@@ -1,0 +1,70 @@
+{
+    "github": {
+        "silent": true
+    },
+
+    "builds": [
+        {
+            "src": "package.json",
+            "use": "@vercel/static-build",
+            "config": { 
+                "distDir": "dist" 
+            }
+        },
+        { "src": "api/**/*.py", "use": "@vercel/python" },
+        { "src": "api/**/*.js", "use": "@vercel/node" }
+    ],
+
+    "headers": [
+        {
+            "source": "/api/performance/v1",
+            "headers": [
+                {
+                    "key": "cache-control",
+                    "value": "no-cache"
+                }
+            ]
+        },
+    
+        {
+            "source": "/api/info",
+            "headers": [
+                {
+                    "key": "cache-control",
+                    "value": "no-cache"
+                }
+            ]
+        },
+        {
+            "source": "/api/version",
+            "headers": [
+                {
+                    "key": "cache-control",
+                    "value": "no-cache"
+                }
+            ]
+        }
+    ],
+
+    "rewrites": [
+
+        {
+            "source": "/performance/v1",
+            "destination": "/api/performance/v1/index.js"
+        },
+        
+        {
+            "source": "/api/info",
+            "destination": "/api/v2/ytdl.py"
+        },
+        {
+            "source": "/api/version",
+            "destination": "/api/v2/ytdl.py"
+        },
+
+        { 
+            "source": "/(.*)", 
+            "destination": "/api/v2/media.js" 
+        }
+    ]
+}
